@@ -379,13 +379,9 @@ Now we try to make svg image by using D3.
 **Step 1** − Create a container to hold the SVG image, for example: `<div id = "svgcontainer"></div>`
 
 **Step 2** − Select the SVG container using the select() method and inject the SVG element using the append() method. Add the attributes and styles using the attr() and the style() methods.
-
 `var width = 300;
-
 var height = 300;
-
 var svg = d3.select("#svgcontainer")
-
 .append("svg").attr("width", width).attr("height", height);`
 
 **Step 3** − Similarly, add the line element inside the svg element as shown below.
