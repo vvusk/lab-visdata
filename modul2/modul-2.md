@@ -495,6 +495,8 @@ source:
     - warna, gunakan 2 warna yang berbeda. Salah satu warna (fill) digunakan untuk produk berharga < 7.00 USD, warna lainnya untuk produk dengan harga >= 7.00 USD
     - beri border untuk setiap lingkaran (SVG property: stroke)
 
-Hasil akhirnya lebih kurang seperti ini:
-
 [![exc1](https://i.im.ge/2023/02/09/a6iZxY.exc1.png)](https://im.ge/i/a6iZxY)
+
+Hasil akhirnya lebih kurang seperti di atas.
+
+
