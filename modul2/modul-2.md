@@ -467,6 +467,12 @@ It is crucial to set the SVG coordinates of visual elements. If we don't set the
 </html>
 ```
 
+source:
+- https://www.tutorialspoint.com/d3js/
+- https://github.com/UBC-InfoVis/447-materials/tree/22Jan/tutorials/1_D3_Tutorial_Intro
+- https://gist.github.com/akirap3/84e5d55c85b224466f44a35297d42a4b
+
+
 ### LATIHAN 1
 
 1. Buat satu projek D3 yang baru dan berisi folder js dan css. Contoh [template folder](https://drive.google.com/file/d/1yFRoKT5ihVnVKHwUBkxopGNEEDIzXzxy/view?usp=sharing).
