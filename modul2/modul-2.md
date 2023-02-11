@@ -497,6 +497,6 @@ source:
 
 [![exc1](https://i.im.ge/2023/02/09/a6iZxY.exc1.png)](https://im.ge/i/a6iZxY)
 
-Hasil akhirnya lebih kurang seperti di atas.
+Hasil akhirnya lebih kurang seperti di atas. Klik gambar di atas agar muncul tampilan penuhnya.
 
 
