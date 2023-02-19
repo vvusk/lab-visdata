@@ -151,13 +151,13 @@ Next we try to use json file for external data to draw SVG graph. The file can b
 
 ### LATIHAN 1
 
-1. Ubah latihan 1 yang ada pada Modul 2 dengan menggunakan external data yang dapat didownload di [sini](https://github.com/vvusk/lab-visdata/blob/26b8f8447da21df9460d9ceeb6934be4075b7584/modul3/sandwiches.csv)
+1. Ubah latihan 1 yang ada pada Modul 2 dengan menggunakan external data yang dapat didownload di [sini](https://github.com/vvusk/lab-visdata/blob/26b8f8447da21df9460d9ceeb6934be4075b7584/modul3/sandwiches.csv).
 
 
 ### LATIHAN 2
 
 Gunakan folder pada latihan sebelumnya. Anda hanya perlu membuat file yang baru untuk latihan ini.
-- Download dataset di: https://github.com/vvusk/lab-visdata/blob/401df2670b19274b58b45bcabdd8f481bd9cf81e/modul3/cities_and_population.csv
+- Download dataset di [sini](https://github.com/vvusk/lab-visdata/blob/401df2670b19274b58b45bcabdd8f481bd9cf81e/modul3/cities_and_population.csv)
 - Gunakan D3 untuk membaca file CSV tersebut. Tes pembacaan data yang berhasil ke web console dan inspect di web browser. Lakukan pengecekan tipe data untuk variable pada file tersebut.
 - Filter dataset menggunakan Javascript. Kita hanya akan menggunakan kota yang merupakan bagian dari Uni Eropa (European Union). Data yang sudah difilter itulah yang akan digunakan pada latihan ini.
 - Tampah satu paragraf ke dokumen HTML. Hitung semua data yang ada di dalam dataset yang sudah difilter dan gunakan Javascript atau D3 untuk menuliskan jumlah negara tersebut pada halaman web.
