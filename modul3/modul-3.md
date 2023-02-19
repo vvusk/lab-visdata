@@ -159,8 +159,8 @@ Next we try to use json file for external data to draw SVG graph. The file can b
 Gunakan folder pada latihan sebelumnya. Anda hanya perlu membuat file yang baru untuk latihan ini.
 - Download dataset di [sini](https://github.com/vvusk/lab-visdata/blob/401df2670b19274b58b45bcabdd8f481bd9cf81e/modul3/cities_and_population.csv)
 - Gunakan D3 untuk membaca file CSV tersebut. Tes pembacaan data yang berhasil ke web console dan inspect di web browser. Lakukan pengecekan tipe data untuk variable pada file tersebut.
-- Filter dataset menggunakan Javascript. Kita hanya akan menggunakan kota yang merupakan bagian dari Uni Eropa (European Union). Data yang sudah difilter itulah yang akan digunakan pada latihan ini.
-- Tampah satu paragraf ke dokumen HTML. Hitung semua data yang ada di dalam dataset yang sudah difilter dan gunakan Javascript atau D3 untuk menuliskan jumlah negara tersebut pada halaman web.
+- Filter dataset menggunakan Javascript. Kita hanya akan menggunakan kota yang merupakan bagian dari Uni Eropa (European Union). Data yang sudah difilter itulah yang akan digunakan pada latihan ini. Cara untuk memfilter dapat dilihat di [sini](https://d3-graph-gallery.com/graph/basic_datamanipulation.html). Jangan lupa data yang sudah difilter disimpan kembali di data.
+- Tambah satu paragraf ke dokumen HTML. Hitung semua data yang ada di dalam dataset yang sudah difilter dan gunakan Javascript atau D3 untuk menuliskan jumlah negara tersebut pada halaman web.
 - Siapkan data, dengan mengubah nilai numerik ke number. 
 - Gambar satu circle SVG untuk setiap baris yang ada pada dataset yang sudah di filter. 
     - Setiap unsur (drawing area + circle) dibuat secara dinamis dengan D3.
