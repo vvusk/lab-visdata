@@ -181,7 +181,7 @@ Gunakan folder pada latihan sebelumnya. Anda hanya perlu membuat file yang baru 
 
 Hasil tampilan dari latihan ini lebih kurang seperti gambar berikut.
 
-[![exc2](https://i.im.ge/2023/02/19/aGAAJC.exc2.md.png)](https://im.ge/i/aGAAJC)
+[![exc2](https://i.im.ge/2023/02/19/7MirCa.exc2.md.png)](https://im.ge/i/7MirCa)
 
 ## Making a Chart
 
