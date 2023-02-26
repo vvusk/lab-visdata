@@ -512,3 +512,4 @@ Sources:
 - https://www.w3schools.com/graphics/svg_path.asp
 - https://github.com/UBC-InfoVis/447-materials/tree/22Jan/tutorials/2_D3_Tutorial_Making_Chart
 - https://gist.github.com/akirap3/84e5d55c85b224466f44a35297d42a4b
+- https://d3-graph-gallery.com/graph/shape.html
