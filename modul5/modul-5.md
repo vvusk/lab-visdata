@@ -135,7 +135,7 @@ We can now start the pipeline again, with a slightly different array:
 `let circle = svg.selectAll("circle")
 	.data([10, 15]);`
 
-[![key-function-1](https://i.im.ge/2023/03/04/7jhk0C.key-function-1.png)](https://im.ge/i/7jhk0C)
+[![key-function-1](https://i.im.ge/2023/02/27/7qemYP.key-function-1.png)](https://im.ge/i/7qemYP)
 
 The index will be used again as the default key to match the new data to the actual circles. There are three circles on the webpage and two items in the new dataset. Therefore, the last circle will be removed and the other two circles will be bound to the new data.
 
