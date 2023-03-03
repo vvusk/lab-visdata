@@ -21,7 +21,7 @@ This means that we are merging new data with existing elements. In the merging p
 - Update: What happens to existing elements which have changed?
 - Exit: What happens to existing DOM elements which are not associated with data anymore?
 
-[![enter_update_exit_sketch](https://i.im.ge/2023/02/26/7qowjD.enter-update-exit-sketch.jpg)](https://im.ge/i/7qowjD)
+[![enter_update_exit_sketch](https://i.im.ge/2023/03/04/7jhZ6Y.enter-update-exit-sketch.jpg)](https://im.ge/i/7jhZ6Y)
 
 To take care of the enter-update-exit pattern, we have to change the sequence of our D3 code a little bit. Instead of chaining everything together, some code snippets must be separated.
 
@@ -135,7 +135,7 @@ We can now start the pipeline again, with a slightly different array:
 `let circle = svg.selectAll("circle")
 	.data([10, 15]);`
 
-[![key-function-1](https://i.im.ge/2023/02/27/7qemYP.key-function-1.png)](https://im.ge/i/7qemYP)
+[![key-function-1](https://i.im.ge/2023/03/04/7jhk0C.key-function-1.png)](https://im.ge/i/7jhk0C)
 
 The index will be used again as the default key to match the new data to the actual circles. There are three circles on the webpage and two items in the new dataset. Therefore, the last circle will be removed and the other two circles will be bound to the new data.
 
@@ -154,7 +154,7 @@ let circle = svg.selectAll("circle")
 
 In the above example, the key function allows us to map the data value directly instead of the default by-index behavior:
 
-[![key-function-2](https://i.im.ge/2023/02/27/7sQF8F.key-function-2.png)](https://im.ge/i/7sQF8F)
+[![key-function-2](https://i.im.ge/2023/03/04/7jhzgq.key-function-2.png)](https://im.ge/i/7jhzgq)
 
 This means, we can update the appropriate elements without having to delete and re-add elements. We can update them in place!
 
