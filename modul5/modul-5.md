@@ -354,7 +354,7 @@ Download template [here](https://drive.google.com/file/d/15dOD6-MxN0bKlwcSNccc_t
 
 Sources:
 - https://www.w3schools.com/graphics/svg_path.asp
-- https://github.com/UBC-InfoVis/447-materials/tree/22Jan/tutorials/2_D3_Tutorial_Making_Chart
+- https://github.com/UBC-InfoVis/447-materials/tree/22Jan/tutorials/3_D3_Tutorial_Datajoin
 - https://gist.github.com/akirap3/84e5d55c85b224466f44a35297d42a4b
 - https://bost.ocks.org/mike/nest/
 - http://using-d3js.com/index.html
