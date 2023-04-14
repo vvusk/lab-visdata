@@ -19,86 +19,86 @@ We want to visualize hiking trails near Vancouver, as illustrated in the figure 
 [![linked_charts_basic](https://i.im.ge/2023/03/07/7AHf00.linked-charts-basic.md.png)](https://im.ge/i/7AHf00)
 
 In the following, we describe one possible implementation workflow:
-- Setup
+1. **Setup**
     
     We create three JS files, `main.js`, `scatterplot.js`, and `barchart.js`, in addition to the HTML and CSS files.
     - In `main.js`, we load the data and initialize the two vis classes:
     - We implement two classes *Scatterplot* and *Barchart* as learned earlier. For the scatter plot, it is important that we use D3's enter-update-exit pattern because we don't want to remove and redraw the entire chart whenever the data changes.  
+    ```
+    let data, scatterplot, barchart;
+
+     d3.csv('data/vancouver_trails.csv')
+       .then(_data => {
+         data = _data;
+
+         // ... data preprocessing etc. ...
+
+         scatterplot = new Scatterplot(config, data);
+         scatterplot.updateVis();
+
+         barchart = new Barchart(config, data);
+         barchart.updateVis();
+       });
+    ```
     
-
-
-```python
-let data, scatterplot, barchart;
-
- d3.csv('data/vancouver_trails.csv')
-   .then(_data => {
-     data = _data;
-
-     // ... data preprocessing etc. ...
-
-     scatterplot = new Scatterplot(config, data);
-     scatterplot.updateVis();
-
-     barchart = new Barchart(config, data);
-     barchart.updateVis();
-   });
-```
-
-- Filtering mechanism in main.js
+2. **Filtering mechanism in `main.js`**
 
     We add a global array to store active filter options.
-    
-    `let difficultyFilter = [];`
-    
+
+        let difficultyFilter = [];
+
     We create a new function to filter the data that is shown in the scatterplot. All the data is shown when no filters have been selected.
     
-    `function filterData() {
-  if (difficultyFilter.length == 0) {
-    scatterplot.data = data;
-  } else {
-    scatterplot.data = data.filter(d => difficultyFilter.includes(d.difficulty));
-  }
-  scatterplot.updateVis();
-}`
-
-- Add event listener in barchart.js
+    ```
+    function filterData() {
+      if (difficultyFilter.length == 0) {
+        scatterplot.data = data;
+      } else {
+        scatterplot.data = data.filter(d => difficultyFilter.includes(d.difficulty));
+      }
+      scatterplot.updateVis();
+    }
+    ```
+    
+3. **Add event listener in barchart.js**
 
     Whenever users click on a *bar*, we update the selection and call `filterData()` to trigger a change in the scatter plot.
+    
+    ```
+    const bars = svg.selectAll('.bar')
+        .data(aggregatedData, xValue)
+      .join('rect')
+        .attr('class', 'bar')
+        .attr('x', d => xScale(xValue(d)))
+        // ... other attributes ...
+        .on('click', function(event, d) {
+            // Check if filter is already active
+          const isActive = difficultyFilter.includes(d.key);
+          if (isActive) {
+            // Remove filter
+            difficultyFilter = difficultyFilter.filter(f => f !== d.key);
+          } else {
+            // Add filter
+            difficultyFilter.push(d.key);
+          }
+          // Call global function to update scatter plot
+          filterData();
 
+          // Add class to style active filters with CSS
+          d3.select(this).classed('active', !isActive);
+        });
+    ```
+    
+4. **Style bar chart filters in `style.css`**
 
-```python
-const bars = svg.selectAll('.bar')
-    .data(aggregatedData, xValue)
-  .join('rect')
-    .attr('class', 'bar')
-    .attr('x', d => xScale(xValue(d)))
-    // ... other attributes ...
-    .on('click', function(event, d) {
-        // Check if filter is already active
-      const isActive = difficultyFilter.includes(d.key);
-      if (isActive) {
-        // Remove filter
-        difficultyFilter = difficultyFilter.filter(f => f !== d.key);
-      } else {
-        // Add filter
-        difficultyFilter.push(d.key);
-      }
-      // Call global function to update scatter plot
-      filterData();
-
-      // Add class to style active filters with CSS
-      d3.select(this).classed('active', !isActive);
-    });
-```
-
-- Style bar chart filters in style.css
-
-    `.bar:hover {
-  stroke: #777;
-}
-.bar.active {
-  stroke: #333;
-}`
+    ```
+    .bar:hover {
+      stroke: #777;
+    }
+    .bar.active {
+      stroke: #333;
+    }
+    ```
 
 You can see the final source code on [codesandbox](https://codesandbox.io/s/cranky-parm-eb8z0d?file=/index.html).
 
@@ -112,55 +112,60 @@ However, to ensure good programming practice, especially with more complex visua
 
 In the following, we describe how to modify the previous example in order to use an event handler:
 
-- Initialize dispatcher
+1. **Initialize dispatcher**
 
     We initialize a dispatcher that is used to orchestrate events in `main.js`.
 
-    `const dispatcher = d3.dispatch('filteredCategories');`
+    ```
+    const dispatcher = d3.dispatch('filteredCategories');
+    ```
     
     In our example, we just register a single event (`filteredCategories`) but we could expand this easily to a set of events: `d3.dispatch('filteredCategories', 'selectedPoints', 'reset');`
     
-- Pass the dispatcher to the vis component during the instantiation
+2. **Pass the dispatcher to the vis component during the instantiation**
     
-    `barchart = new Barchart({
-	parentElement: '#barchart'
-}, dispatcher, data);`
+    ```
+    barchart = new Barchart({
+        parentElement: '#barchart'
+    }, dispatcher, data);
+    ```
 
-- Listen for mouse events
+3. **Listen for mouse events**
     
     In the `barchart.js`, we bind a click listener to each bar/rectangle similar to the example earlier. Whenever a bar is selected, we add the class "active", get an array with the names of all active categories, and call the dispatcher. A second click makes a category inactive.
+    
+    ```
+    // Previous D3 code / attributes of the SVG rectangle ...
+    .attr('class', 'bar')
+    .on('click', function(event, d) {
+      // Check if current category is active and toggle class
+      const isActive = d3.select(this).classed('active');
+      d3.select(this).classed('active', !isActive);
 
+      // Get the names of all active/filtered categories
+      const selectedCategories = vis.chart.selectAll('.bar.active').data().map(k => k.key);
 
-```python
-// Previous D3 code / attributes of the SVG rectangle ...
-.attr('class', 'bar')
-.on('click', function(event, d) {
-  // Check if current category is active and toggle class
-  const isActive = d3.select(this).classed('active');
-  d3.select(this).classed('active', !isActive);
-
-  // Get the names of all active/filtered categories
-  const selectedCategories = vis.chart.selectAll('.bar.active').data().map(k => k.key);
-
-  // Call dispatcher and pass the event name, D3 event object,
-  // and our custom event data (selected category names)
-  vis.dispatcher.call('filterCategories', event, selectedCategories);
-});
-```
-
-- Orchestrate events using the dispatcher
+      // Call dispatcher and pass the event name, D3 event object,
+      // and our custom event data (selected category names)
+      vis.dispatcher.call('filterCategories', event, selectedCategories);
+    });
+    ```
+    
+4. **Orchestrate events using the dispatcher**
     
     In `main.js`, we just need to wait until the `filterCategories` event gets triggered. We filter the data based on the selected categories and update the scatter plot. Here, it is important to not override the original data (`data`) with the filtered data.
     
-    `dispatcher.on('filterCategories', selectedCategories => {
-	if (selectedCategories.length == 0) {
-		scatterplot.data = data;
-	} else {
-		scatterplot.data = data.filter(d => selectedCategories.includes(d.difficulty));
-	}
-	scatterplot.updateVis();
-});`
-
+    ```
+    dispatcher.on('filterCategories', selectedCategories => {
+        if (selectedCategories.length == 0) {
+            scatterplot.data = data;
+        } else {
+            scatterplot.data = data.filter(d => selectedCategories.includes(d.difficulty));
+        }
+        scatterplot.updateVis();
+    });
+    ```
+    
 You can see the final source code on [codesandbox](https://codesandbox.io/s/heuristic-cache-dv4ui0?file=/index.html).
 
 [![dispatcher](https://i.im.ge/2023/03/20/DRPLFP.dispatcher.md.png)](https://im.ge/i/DRPLFP)
@@ -235,32 +240,32 @@ Symbols are commonly used in scatter plots as a channel to encode categorical at
 
 Example usage in a scatter plot that uses three different symbols for the categories "*Easy*", "*Intermediate*", and "*Difficult*".
 
-1. Initialize ordinal scale
+1. **Initialize ordinal scale**
 
     The output range are the three symbols: circle, square, and diamond.
     
-    `const symbolScale = d3.scaleOrdinal()
-    .range([
-    	d3.symbol().type(d3.symbolCircle)(),
-    	d3.symbol().type(d3.symbolSquare)(),
-    	d3.symbol().type(d3.symbolDiamond)()
-    ])
-    .domain(['Easy', 'Intermediate', 'Difficult']);`
+    ```
+    const symbolScale = d3.scaleOrdinal()
+        .range([
+            d3.symbol().type(d3.symbolCircle)(),
+            d3.symbol().type(d3.symbolSquare)(),
+            d3.symbol().type(d3.symbolDiamond)()
+        ])
+        .domain(['Easy', 'Intermediate', 'Difficult']);
+    ```
     
 2. Append symbols to SVG
     
-
-
-```python
-const symbols = svg.selectAll('.symbol')
-    .data(data)
-    .enter()
-  .append('path')
-    .attr('class', 'symbol')
-    .attr('transform', d => `translate(${xScale(d.time)}, ${yScale(d.distance)})`)
-    .attr('d', d => symbolScale(d.difficulty));
-```
-
+    ```
+    const symbols = svg.selectAll('.symbol')
+        .data(data)
+        .enter()
+      .append('path')
+        .attr('class', 'symbol')
+        .attr('transform', d => `translate(${xScale(d.time)}, ${yScale(d.distance)})`)
+        .attr('d', d => symbolScale(d.difficulty));
+    ```
+    
 See the full source code of this example on [codesandbox](https://codesandbox.io/s/competent-ardinghelli-97eizm?file=/index.html).
 
 [![symbols](https://i.im.ge/2023/03/20/DRxAWK.symbols.md.png)](https://im.ge/i/DRxAWK)
