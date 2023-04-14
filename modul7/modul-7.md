@@ -182,41 +182,49 @@ There are three types of brushes in D3 for brushing along the x, y dimensions, o
 
 In the following code snippets we show you how to use `d3.brushX` but it is straightforward to adopt the workflow for other brush types. First, we need to define a scale function:
 
-`// Initialize time scale (x-axis)
+```
+// Initialize time scale (x-axis)
 const xScale = d3.scaleTime()
 	.range([0, width])
-	.domain(d3.extent(data, d => d.timestamp));`
+	.domain(d3.extent(data, d => d.timestamp));
+```
 
 Then we initialize the brush. The brushable area is specified via `extent()`. In most cases, we only need to specify the *width* and *height*, and the top coordinates are just `[0,0]`. In addition, we listen to two types of events (`brush` and `end`) and call the functions `brushed` and `brushended` accordingly.
 
-`const brush = d3.brushX()
+```
+const brush = d3.brushX()
     .extent([[0, 0], [width, height]])
     .on('brush', brushed)
-    .on('end', brushended);`
+    .on('end', brushended);
+```
 
 We also need to append the brush component to the SVG area to make it accessible to the user:
 
-`const brushG = svg.append('g')
+```
+const brushG = svg.append('g')
 	.attr('class', 'brush x-brush')
-	.call(brush);`
+	.call(brush);
+```
     
 Finally, we wait for the brush events. When a brush event listener is invoked, it receives the current brush event which contains the current `selection` in pixel coordinates (`[x0, x1]`). After both events, we check if the selection is empty to know if the brush is still active or if it has been removed, for example, when the user just makes a single click to reset it.
 
-`function brushed({selection}) {
+```
+function brushed({selection}) {
 	if (selection) {
 		const selectedDomain = selection.map(xScale.invert, xScale);
 		// Do something with the new selection
 		// ...
 	}
-}`
+}
 
-`function brushended({selection}) {
+function brushended({selection}) {
 	if (!selection) {
 		// Brush has been removed
 		// Probably we want to reset other views afterwards
 		// ...
 	}
-}`
+}
+```
 
 You can see the complete example of our *focus+context* visualization using `d3.brushX` on [codesandbox](https://codesandbox.io/s/confident-blackwell-3ykm18?file=/index.html). The visualization shows the S&P 500 Index over the last few years and users can brush along the x-axis to select a specific time window. We also demonstrate how to set a default brush programmatically with `brush.move`. We decided to create both views within a single JS class because they share the same data and many parameters but it would be also perfectly correct to create two independent components and use `d3.dispatch` to link them.
 
@@ -254,7 +262,7 @@ Example usage in a scatter plot that uses three different symbols for the catego
         .domain(['Easy', 'Intermediate', 'Difficult']);
     ```
     
-2. Append symbols to SVG
+2. **Append symbols to SVG**
     
     ```
     const symbols = svg.selectAll('.symbol')
@@ -278,20 +286,26 @@ Conveniently, D3 provides a *stack generator* that is doing all the calculations
 
 Example data:
 
-`const data = [
+```
+const data = [
 	{ 'year': 2015, 'milk': 10, 'water': 4 },
 	{ 'year': 2016, 'milk': 12, 'water': 6 },
 	{ 'year': 2017, 'milk': 6, 'water': 7 }
-];`
+];
+```
 
 We initialize a stack generator and specify the categories or layers that we want to show in our chart:
 
-`const stack = d3.stack().keys(['milk', 'water']);`
+```
+const stack = d3.stack().keys(['milk', 'water']);
+```
 
 Compute stacked data:
 
-`const stackedData = stack(data);
-console.log(stackedData)`
+```
+const stackedData = stack(data);
+console.log(stackedData)
+```
 
 When we print the data, we can see the computed values: milk (0 to 10, 0-12, 0-11) and water (10-14, 12-18, 11-18).
 
