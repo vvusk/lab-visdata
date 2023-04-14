@@ -38,13 +38,15 @@ In this example we have a feature which represents a single geographical point. 
 
 In many more cases, GeoJSON files contain complex polygon data that represent the boundaries of multiple regions or countries instead of a plain list of points:
 
-`"geometry": {
+```
+"geometry": {
 	"type": "MultiPolygon",
 	"coordinates": [[[[-131.602021,55.117982],
 		[-131.569159,55.28229],[-131.355558,55.183705],
 		[-131.38842,55.01392],[-131.645836,55.035827], ...
     ]]]
-}`
+}
+```
 
 Depending on the resolution of the dataset, each feature will include more or less longitude/latitude pairs. As you can imagine, the size of a GeoJSON file becomes tremendously high if you store the boundaries of a whole continent in high resolution.
 
@@ -80,7 +82,9 @@ We will use Canadian provinces stored in a TopoJSON file as an example.
 
 The following code defines a *Mercator* projection function, which is commonly used but known to over-exaggerate the size of landmasses near the poles.
 
-`const projection = d3.geoMercator().fitSize([width, height], geoJsonData);`
+```
+const projection = d3.geoMercator().fitSize([width, height], geoJsonData);
+```
 
 The `fitExtent()` method defines the scale and translate of the projection so that the geometry (i.e., loaded data) fits within the SVG area or given bounding box.
 
@@ -88,7 +92,9 @@ The projection can be further customized by using parameters like `scale()`, `ce
 
 The path generator takes the projected 2D geometry from the last step and formats it appropriately for SVG. Or in other words, the generator maps the GeoJSON coordinates to SVG paths by using the projection function.
 
-`const geoPath = d3.geoPath().projection(projection);`
+```
+const geoPath = d3.geoPath().projection(projection);
+```
 
 After defining the SVG area, the projection and the path generator, we can load the TopoJSON data, convert it to GeoJSON and finally map it to SVG paths.
 
@@ -120,11 +126,13 @@ Some TopoJSON files, for example covering the U.S., contain geographical data fo
 
 For some regions, the boundaries might not be clearly visible if we just draw the shapes of those regions. An alternative solution is to explicitly draw the borders (e.g., of Canadian provinces) on top of our existing map. For that we can use [topojson.mesh](https://github.com/topojson/topojson-client/blob/master/README.md#mesh) to extract separating lines between regions from the TopoJSON data. In addition, we could apply custom styles to the region boundaries.
 
-`const geoBoundaryPath = d3.select('svg').selectAll('.geo-boundary-path')
+```
+const geoBoundaryPath = d3.select('svg').selectAll('.geo-boundary-path')
         .data([topojson.mesh(data, data.objects.provinces)])
       .join('path')
         .attr('class', 'geo-boundary-path')
-        .attr('d', geoPath);`
+        .attr('d', geoPath);
+```
         
 See our example on [codesandbox](https://codesandbox.io/s/relaxed-ramanujan-31eu4p?file=/index.html) that shows the Mercator projection and the Lambert conformal conic projection side by side. The Lambert projection is commonly used to visualize Canada's provinces and is recommended by [Statistics Canada](https://www150.statcan.gc.ca/n1/pub/92-195-x/2011001/other-autre/mapproj-projcarte/m-c-eng.htm).
 
@@ -136,7 +144,8 @@ You have seen how to draw a vector map with D3 but we are currently not encoding
 
 [![symbol-map](https://i.im.ge/2023/04/11/IB5Bxa.symbol-map.md.png)](https://im.ge/i/IB5Bxa)
 
-1. Load data
+1. **Load data**
+
     We load two datasets: a TopoJSON file of the world and a CSV file with the coordinates of the world wonders and their average visitor numbers.
 
     In order to load multiple files, we can use JS [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) (`Promise.all()`). The two datasets are stored in the data array.
@@ -157,7 +166,7 @@ You have seen how to draw a vector map with D3 but we are currently not encoding
     })
     ```
 
-2. Initialize projection and path generator
+2. **Initialize projection and path generator**
 
     We chose an equirectangular projection (`d3.geoEquirectangular()`) which maps meridians to vertical straight lines of constant spacing and is often used for world maps. After initializing the projection, we define the scale and orientation. We also crop Antarctica because it takes up a lot of space but is not relevant for our data and type of analysis. As previously mentioned, the positioning of a projection takes some practice and is often done through multiple *trial and error* steps until you are satisfied with the result. You can also look up blogs or source codes of D3 maps that are posted online, as we did for this example ([Making a map using D3.js](https://medium.com/@andybarefoot/making-a-map-using-d3-js-8aa3637304ee)):
     
@@ -170,9 +179,11 @@ You have seen how to draw a vector map with D3 but we are currently not encoding
    
    Then we can use the projection in our path generator:
 
-    `const geoPath = d3.geoPath().projection(projection);`
+    ```
+    const geoPath = d3.geoPath().projection(projection);
+    ```
     
-3. Initialize scale for circle symbols
+3. **Initialize scale for circle symbols**
 
     We want to position a circle at the location of each world wonder and use the circle size as an indicator for the average number of visitors.
 
@@ -186,7 +197,7 @@ You have seen how to draw a vector map with D3 but we are currently not encoding
 	.domain(d3.extent(data, d => d.visitors));
     ```
 
-4. Draw world map
+4. **Draw world map**
 
     We draw the shapes of the countries that are stored in TopoJSON format in the variable `geoData`.
     
@@ -210,7 +221,7 @@ You have seen how to draw a vector map with D3 but we are currently not encoding
         .attr('d', geoPath);
     ```
     
-5. Draw circle symbols
+5. **Draw circle symbols**
 
     We use our second dataset (`data`) and append a circle symbol for each row. Similar to the previous code snippets, we use `.join()` which is a short-cut for the D3 enter-update-exit pattern. Thus, we could easily add a filter or other interactive components and just call this code (i.e. `updateVis()`) with new data repeatedly.
     
@@ -228,7 +239,7 @@ You have seen how to draw a vector map with D3 but we are currently not encoding
         .attr('cy', d => projection([d.lon,d.lat])[1]);
     ```
     
-6. Add text labels to all symbols
+6. **Add text labels to all symbols**
 
     We want to show the name of each world wonder right above the symbol. This code is very similar to the circles and we only need to adjust the attributes.
     
@@ -265,7 +276,7 @@ You have seen how to draw a vector map with D3 but we are currently not encoding
         .text(d => `${d.visitors} mio. visitors`)
     ```
     
-7. Bind tooltips to symbols
+7. **Bind tooltips to symbols**
 
     In the last step, we bind tooltips to the symbols to show the visitor count when users hover over the circle.
 
@@ -306,7 +317,7 @@ You can read more about these issues in this [blog post](https://github.com/UBC-
 
 In the following, we will highlight the main differences for implementing a choropleth map compared to the previous symbol map example. Our goal is to create a choropleth map that shows the population density per square km for African countries.
 
-1. Load data
+1. **Load data**
 
     We load two datasets: a TopoJSON file of the African continent (`geoData`) and a CSV file with population density estimates of all countries in 2020 (`countryData`). This time, we add the population density as an additional attribute to the TopoJSON features, so that we don't need to handle two datasets.
     
@@ -320,7 +331,7 @@ In the following, we will highlight the main differences for implementing a chor
     });
     ```
 
-2. Initialize projection and define scale
+2. **Initialize projection and define scale**
 
     We use the Mercator projection and scale it to fit all countries within the SVG area.
     
@@ -335,7 +346,7 @@ In the following, we will highlight the main differences for implementing a chor
     projection.fitSize([width, height], countries);
     ```
     
-3. Initialize colour scale and stripe pattern
+3. **Initialize colour scale and stripe pattern**
 
     We use a colour scale that linearly interpolates colours between light and dark blue.
     
@@ -362,7 +373,7 @@ In the following, we will highlight the main differences for implementing a chor
     </svg>
     ```
     
-4. Draw the choropleth map
+4. **Draw the choropleth map**
 
     We append the shape path of each country. For the `fill` attribute we distinguish between the colour scale or the stripe pattern. We apply the pattern by using the string `url(#lightstripe)`. "lightstripe" is the same ID that we used in the pattern specification (`<pattern id="lightstripe" `...)
     
@@ -403,17 +414,23 @@ Workflow to create a Leaflet map
 - Download [Leaflet](https://leafletjs.com/) and include the JS and CSS files.
 - Create a parent HTML container for the map, such as
 
-    `<div id="my-map"></div>'
+    ```
+    <div id="my-map"></div>
+    ```
     
 - Specify the size of the map container
 
-    `#my-map { width: 100%; height: 500px; }`
+    ```
+    #my-map { width: 100%; height: 500px; }
+    ```
     
 - Initialize the map object
 
-   `const map = L.map('my-map').setView([40.712784, -74.005941], 13);`
+   ```
+   const map = L.map('my-map').setView([40.712784, -74.005941], 13);
+   ```
    
-    - `[40.712784, -74.005941]` corresponds to the geographical center of the map (`[latitudu, longitude]`). In this example we have specfied the center to be in New York City.
+    - `[40.712784, -74.005941]` corresponds to the geographical center of the map (`[latitude, longitude]`). In this example we have specfied the center to be in New York City.
     - If you want to know the latitude-longitude pair of a specific city or address you can use a web service, for instance: [latlong.net](https://www.latlong.net/).
     - Additionaly, we have defined a default zoom-level (13).
     
