@@ -84,14 +84,16 @@ Above example was a very simple one. We have the following recommendations when 
 - Call `myChart.updateVis()` to update the visualization accordingly.
 - Add chart-specific events within the `myChart.js` class. For example, when you want listen to mouseover events on SVG circles, use D3's `.on()` function when you render the circles:
 
-` svg.selectAll('circle')
+``` 
+svg.selectAll('circle')
 		.data(data)
    .join('circle')
    	.attr('fill', 'green')
    	.attr('r', 4)
    	.attr('cx', d => vis.xScale(d.x))
    	.attr('cy', d => vis.yScale(d.y))
-   	.on('mouseover', d => console.log('debug, show tooltip, etc.'))`
+   	.on('mouseover', d => console.log('debug, show tooltip, etc.'))
+```
 
 - Alternatively, you could also use jQuery or other JS libraries to handle events.
 
@@ -113,10 +115,12 @@ In our second example, the circle color changes from red to blue over time. The 
 
 This example shows an animation from red to blue (3 seconds):
 
-`d3.selectAll('circle')
+```
+d3.selectAll('circle')
 	.transition()
 	.duration(3000)
-	.attr('fill', 'blue');`
+	.attr('fill', 'blue');
+```
 
 [![animation1](https://i.im.ge/2023/03/06/7NJypm.animation1.md.gif)](https://im.ge/i/7NJypm)
 
@@ -157,11 +161,13 @@ This example shows an animation from red to blue (3 seconds):
 
 If you need to delay an animation, you can add the `delay()` method right after `transition()`.
 
-`d3.selectAll('circle')
+```
+d3.selectAll('circle')
 			.transition()
 			.delay(500)
 			.duration(3000)
-			.attr('fill', 'blue');`
+			.attr('fill', 'blue');
+```
             
 #### Animation for Visualization
 
@@ -186,14 +192,19 @@ When you create interactive visualizations, you often want to show tooltips to r
 Example implementation workflow:
 - Add tooltip placeholder to the HTML file:
 
- `<div id="tooltip"></div>`
+    ```
+     <div id="tooltip"></div>
+    ```
+    
 - Set absolute position, hide tooltip by default, and define additional optional styles in CSS:
 
- `#tooltip {
- 	position: absolute;
- 	display: none;
- 	/* ... other tooltip styles ... */
- }`
+    ```
+     #tooltip {
+        position: absolute;
+        display: none;
+        /* ... other tooltip styles ... */
+     }
+    ```
  
 - In JS (D3), update tooltip content, position, and visibility when users hovers over a mark. We distinguish between three different states: `mouseover`, `mousemove`, and `mouseleave` (in case of small marks, we add the positioning to the `mouseover` function and leave out `mousemove`).
 
@@ -236,7 +247,8 @@ Until now, we have created tooltips only for basic SVG elements, such as circles
 We illustrate the mechanism for showing tooltips at fuzzy positions based on a line chart (`date` on x-axis, `stock price` on y-axis).
 - We add a tracking area that covers the whole chart. Whenever users place their mouse cursor inside this area, we want to show a tooltip. After every `mousemove` event we need to update the tooltip accordingly.
 
-`const trackingArea = vis.chart.append('rect')
+```
+const trackingArea = vis.chart.append('rect')
     .attr('width', width)
     .attr('height', height)
     .attr('fill', 'none')
@@ -249,28 +261,37 @@ We illustrate the mechanism for showing tooltips at fuzzy positions based on a l
     })
     .on('mousemove', function(event) {
       // See code snippets below
-    })`
+    })
+```
     
 - Get the x-position of the mouse cursor using `d3.pointer()`. We only want to show a stock price tooltip for a specific date and the y-position is not relevant in this case, but can be extracted similarly.
 
-`const xPos = d3.pointer(event, this)[0]; // First array element is x, second is y`
+```
+    const xPos = d3.pointer(event, this)[0]; // First array element is x, second is y
+```
 
 - We have used D3 scales multiple times to convert data values (input domain) to pixels (output range). We can now use the `invert()` function to do the opposite and get the date that corresponds to the mouse x-coordinate.
 
-`const date = vis.xScale.invert(xPos);`
+```
+    const date = vis.xScale.invert(xPos);
+```
 
 - We want to find the data point (stock price) based on the selected date. Therefore, we use a special helper function `d3.bisector` that returns the nearest `date` (in our dataset) that falls to the left of the mouse cursor. We initialize the `d3.bisector` somewhere outside of `.on('mousemove')`:
 
-`const bisect = d3.bisector(d => d.date).left;`
+```
+    const bisect = d3.bisector(d => d.date).left;
+```
 
 Then we can use `bisect()` to find the nearest object `d` in our dataset.
 (Don't worry too much if this looks cryptic to you. Read more details in these tutorials: [d3noob.org](http://www.d3noob.org/2014/07/my-favourite-tooltip-method-for-line.html), [observable](https://observablehq.com/@d3/d3-bisect))
 
-`const index = vis.bisectDate(vis.data, date, 1);
-const a = vis.data[index - 1];
-const b = vis.data[index];
-const d = b && (date - a.date > b.date - date) ? b : a;
-// d contains: { date: ..., stockPrice: ... }`
+```
+    const index = vis.bisectDate(vis.data, date, 1);
+    const a = vis.data[index - 1];
+    const b = vis.data[index];
+    const d = b && (date - a.date > b.date - date) ? b : a;
+    // d contains: { date: ..., stockPrice: ... }
+```
 
 At the end we can display an HTML or SVG tooltip with the available mouse coordinates and the corresponding data.
 
