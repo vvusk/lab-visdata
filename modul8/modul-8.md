@@ -447,8 +447,6 @@ Workflow to create a Leaflet map
     A list of many tile layer examples (that work with Leaflet) is available on this webpage: [leaflet-extras.github.io/leaflet-providers/preview/](https://leaflet-extras.github.io/leaflet-providers/preview/)
 
     Some of the map providers (e.g., OpenStreetMap, Stamen) made their data completely available for free, while others require the registration of an API key (Google, MapBox, ...) and charge fees after exceeding a specific limit.
-
-    ![Tile Providers](images/map_tile_providers.png?raw=true "Tile Providers")
     
 - We can add a marker with the following line of code:
 
