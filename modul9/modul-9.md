@@ -14,7 +14,7 @@ A common method to visualize networks is to use a force-directed graph showing n
 
 We briefly describe the process to visualize a small network of character co-occurences in *Les Misérables* below.
 
-1. Load data
+1. **Load data**
 
     The network data is given as `nodes` and `links`.
     
@@ -32,7 +32,7 @@ We briefly describe the process to visualize a small network of character co-occ
     ]
     ```
 
-2. Initialize force simulation
+2. **Initialize force simulation**
 
     `forceManyBody()` is used to simulate electrostatic charge causing nodes to repel each other. `forceCenter()` attracts nodes towards the centre of the SVG area. `forceLink().id(...)` links nodes to each other based on their IDs.
     
@@ -43,14 +43,14 @@ We briefly describe the process to visualize a small network of character co-occ
         .force('center', d3.forceCenter(config.width / 2, config.height / 2));
     ```
     
-3. Add data to the simulation
+3. **Add data to the simulation**
 
     ```
     simulation.nodes(data.nodes);
     simulation.force('link').links(data.links);
     ```
     
-4. Draw nodes and links
+4. **Draw nodes and links**
 
     Data can be updated dynamically and we do not need to redraw the graph entirely when it changes.
     
@@ -103,7 +103,7 @@ Sources:
 
 D3 also facilitates the creation of a wide range of hierarchical visualizations. We picked the "tidy tree" layout as one example but you should check out [d3-hierarchy](https://github.com/d3/d3-hierarchy) to learn more about other popular techniques.
 
-1. Load data
+1. **Load data**
 
     For this example, we use a simple JS object that has already a hierarchical structure. In other cases, the data may be given as tabular data and requires some preprocessing.
     
@@ -124,7 +124,7 @@ D3 also facilitates the creation of a wide range of hierarchical visualizations.
     };
     ```
 
-2. Create an abstract data representation to ease traversing of the hierarchy
+2. **Create an abstract data representation to ease traversing of the hierarchy**
 
     We use `d3.hierarchy()` to create an internal hierarchical representation of the data. It computes the depth for all nodes and provides various methods to navigate the tree. For example `node.descendants` returns an array of descendant nodes: the given node, then each child, and each child’s child, and so on.
 
@@ -132,7 +132,7 @@ D3 also facilitates the creation of a wide range of hierarchical visualizations.
     const data = d3.hierarchy(rawData);
     ```
 
-3. Compute the tree layout
+3. **Compute the tree layout**
 
     In the next step, we use `d3.tree()` to compute the layout for the hierarchical data. This method generates x- and y-coordinates of all nodes based on the given chart size.
 
@@ -140,7 +140,7 @@ D3 also facilitates the creation of a wide range of hierarchical visualizations.
     const treeData = d3.tree().size([height, width])(data);
     ```
 
-4. Draw nodes and edges
+4. **Draw nodes and edges**
 
     Finally, we can draw the SVG elements based on the precomputed layout.
     
@@ -201,7 +201,7 @@ You can see an example scrollytelling implementation on [codesandbox](https://co
 
 In the following, we describe the general implementation steps:
 
-1. Page layout
+1. **Page layout**
 
     There are many different ways to arrange content but typically scrollytelling visualizations are divided into two main columns. In one column is the actual visualization that stays in place but the visual representation changes. The second column contains all the text and other material that we want to show next to the visualizations. Users can scroll through the text column in the same way as with regular web pages.
 
@@ -228,7 +228,7 @@ In the following, we describe the general implementation steps:
      }
     ```
     
-2. Initialize event listener using the Waypoints library
+2. **Initialize event listener using the Waypoints library**
 
     After creating a div container for each step and including the Waypoints library in the HTML document, we need to initialize the waypoints in JS.
 
@@ -253,7 +253,7 @@ In the following, we describe the general implementation steps:
     });
     ```
     
-3. Initialize visualization
+3. **Initialize visualization**
 
     Similar to all our previous visualizations, we set up the SVG drawing area and create any static elements. We also bind the data to SVG elements:
     
@@ -263,7 +263,7 @@ In the following, we describe the general implementation steps:
         .data(data).join('rect');
     ```
     
-4. Create steps
+4. **Create steps**
 
     We need to change the visualization based on the currently active step. There are many different ways to implement this mechanism. We decided to create a function for each step and store the function names in a config object.
     
@@ -287,7 +287,7 @@ In the following, we describe the general implementation steps:
     }
     ```
     
-5. Change visual representation
+5. **Change visual representation**
 
     Inside theses function we need to update the attributes. For example, we can change the colour of some rectangles:
     
@@ -478,7 +478,7 @@ Sources:
 - https://www.d3-graph-gallery.com/graph/custom_annotation.html
 - [Making Annotations First-Class Citizens in Data Visualization by Elijah Meeks](https://medium.com/@Elijah_Meeks/making-annotations-first-class-citizens-in-data-visualization-21db6383d3fe)
 
-### 5. Scaleable Visualizations with Canvas
+### 5. Scalable Visualizations with Canvas
 
 The rendering method that is used in D3 visualizations is typically SVG because it comes with multiple advantages:
 - We can bind data to SVG elements to dynamically set attributes which works very well with d3.
@@ -492,6 +492,7 @@ The alternative way to render web-based visualizations is to use [Canvas](https:
 In the following, we briefly describe how to create a scatterplot with 70K points using a combination of SVG and Canvas. We draw the axes in SVG because the D3 helper functions `d3.axisBottom()` and `d3.axisLeft()` return SVG elements. The points are drawn inside a Canvas container.
 
 1. Create Canvas and SVG layers
+
     - We add a div container to the HTML page and set the CSS attribute `position:relative;`
     ```
      <div id="scatterplot"></div>
@@ -518,6 +519,7 @@ In the following, we briefly describe how to create a scatterplot with 70K point
     ```
 
 2. Initialize scales and axes: This step is identical to previously discussed D3 visualizations based on SVG, and thus we do not repeat those steps here.
+
 3. Select the drawing context.
     - The first difference in drawing points inside of a Canvas-container compared to SVG is that we need to select the drawing context. We cannot just append elements to `canvas` but instead need to select the two-dimensional rendering context first:
     ```
